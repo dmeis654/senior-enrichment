@@ -1,4 +1,8 @@
 'use strict';
+// const Sequelize = require("sequelize");
+// const db = new Sequelize('postgres://localhost:5432/senior_enrichment',{
+//     logging: false
+// });
 
 // Require all the models
 	// Running each model (i.e. table) module (i.e. file) registers each model into our sequelize db so any other part of the application could call db.model('user') OR db.models.user to get access to the `user` model.
@@ -6,5 +10,10 @@
 	// This is an acceptable pattern but it does have limitations in that if you change the name of the model you will have to change every time it is requeired everywhere
 
 const User = require('./user')
+const Campus = require('./campus')
+const Student = require('./student')
 
-module.exports = {User}
+Student.belongsTo(Campus)
+Campus.hasMany(Student)
+
+module.exports = {User, Student, Campus}
