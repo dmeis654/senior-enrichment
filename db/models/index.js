@@ -1,8 +1,4 @@
 'use strict';
-// const Sequelize = require("sequelize");
-// const db = new Sequelize('postgres://localhost:5432/senior_enrichment',{
-//     logging: false
-// });
 
 // Require all the models
 	// Running each model (i.e. table) module (i.e. file) registers each model into our sequelize db so any other part of the application could call db.model('user') OR db.models.user to get access to the `user` model.
@@ -13,7 +9,14 @@ const User = require('./user')
 const Campus = require('./campus')
 const Student = require('./student')
 
-Student.belongsTo(Campus)
-Campus.hasMany(Student)
+Student.belongsTo(Campus, {
+    foreignKeyConstraint: true
+    , onDelete: 'cascade'
+});
 
+Campus.hasMany(Student, {
+    foreignKey: 'campusId',
+    onDelete: 'cascade',
+    hooks: true
+});
 module.exports = {User, Student, Campus}

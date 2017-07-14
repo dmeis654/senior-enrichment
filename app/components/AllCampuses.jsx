@@ -3,33 +3,45 @@ import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import axios from 'axios'
 import store from '../store'
-import {fetchCampuses, getCampuses} from "../reducers/index"
+import {fetchCampuses, getCampuses, deleteCampus} from "../reducers/index"
+import NewCampus from './NewCampus'
 
-export function AllCampuses (props) {
+class AllCampuses extends Component {
 
-  // componentDidMount() {
-  //   this.props.allCampuses()
-  // }
+   constructor(props) {
+    super(props);
+    this.renderDelete = this.renderDelete.bind(this)
+   }
 
-  // render() {
+   renderDelete(campusId) {
+     return (
+       <button type="delete" className="btn btn-primary deletebutton" onClick={(event) => this.props.deleteCampus(campusId)}>
+        X
+       </button>
+     )
+   }
 
+  render() {
     return (
       <div>
-        <h3>Campuses</h3>
-        <div className="list-group">
+        <h3 className="camps">Campuses</h3>
+        <ul className="list-group">
           {
-            props.campuses.map(campus => {
+            this.props.campuses.map(campus => {
               return (
-                <div className="list-group-item" key={campus.id}>
+                <li className="list-group-item" key={campus.id}>
                   <Link to={`/campus/${campus.id}`}>{campus.name}</Link>
-                </div>
+                  <img src={campus.image}/>
+                  {this.renderDelete(campus.id)}
+                </li>
               );
             })
           }
-        </div>
+        </ul>
+        <NewCampus />
       </div>
     );
-  //}
+  }
 }
 
 const mapStateToProps = function (state) {
@@ -40,9 +52,9 @@ const mapStateToProps = function (state) {
 
 const mapDispatchToProps = function (dispatch, ownProps) {
   return {
-    //  allCampuses: () => {
-    //    return dispatch(fetchCampuses())
-    //  }
+    deleteCampus: (campusId) => {
+      dispatch(deleteCampus(campusId))
+    }
   }
 }
 

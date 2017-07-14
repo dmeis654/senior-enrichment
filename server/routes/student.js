@@ -33,10 +33,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     Student.findById(req.params.id)
         .then((student) => {
-            return student.update({
-                name: req.body.name,
-                img: req.body.img
-            })
+            return student.update(req.body)
         })
         .then(updatedStudent => res.json(updatedStudent))
         .catch(next)
